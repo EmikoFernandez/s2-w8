@@ -4,6 +4,7 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Random;
 
 public class Forest {
     private String name;
@@ -13,9 +14,11 @@ public class Forest {
     private int initialTreeCount;
     private int burnDuration;
     private Tree[][] grid;
+    public int numRows;
+    public int numCols;
 
     public Forest(String name, String type, String vegetation, double burnRate, int burnDuration, int initialTreeCount, int gridRows, int gridCols) {
-        this.grid = null; //TODO; initialize grid to using gridRows and gridCols
+        this.grid = new Tree[gridRows][gridCols]; //TODO; initialize grid to using gridRows and gridCols
         this.name = name;
         this.type = type;
         this.vegetation = vegetation;
@@ -23,14 +26,40 @@ public class Forest {
         this.initialTreeCount = initialTreeCount;
         this.burnDuration = burnDuration;
         this.initializeForest(); //This is going to populate the grid with trees.
+        numRows = grid[0].length;
+        numCols = grid.length;
     }
     
     public void initializeForest(){
         // Step 1: Determine how many cells in the grid should start as TREE
         //         based on initialTreeCount and the grid dimensions.
+        for(int r = 0; r < numRows; r++){
+            for(int c = 0; c < numCols; r++){
         // Step 2: Fill the grid with EMPTY trees first so every cell has a Tree object.
+                grid[r][c] = new Tree(Tree.EMPTY); // you could replace Tree.EMPTY with 0
+
+            }
+        }
+        int treeNum = 0;
+        while(treeNum < (grid[0].length * grid.length * 0.4)){
+            //get a random number for row 
+            int row = (int)(Math.random()*numRows);
+            //get a random number for column 
+            int column = (int)(Math.random()*numCols);
+            //get the Tree object at the random row and column 
+            //check to make sure it's empty 
+            if(grid[row][column].getState() == Tree.EMPTY){
+                // if empty, set to Tree.Tree OR 1
+                grid[row][column].setState(1);
+                // if empty increment treeNum 
+                treeNum++;
+            }
+        }
+
         // Step 3: Randomly place TREE states until the target initial tree count is reached.
+
         // Step 4: Reset any burn-time/state tracking needed for a fresh simulation start.
+
     }
 
     public Tree[][] deepCopy(){
